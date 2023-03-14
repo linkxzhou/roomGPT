@@ -32,8 +32,15 @@ export default async function handler(
   req: ExtendedNextApiRequest,
   res: NextApiResponse<GenerateResponseData | string>
 ) {
-  // Check if user is logged in
-  const session = await getServerSession(req, res, authOptions);
+  // Check if user is logged in, TODO: auth
+  const session = {
+    user: {
+      name: "Test",
+      email: "Test@gmail.com",
+    },
+    expires: "2030-04-12T01:18:39.044Z"
+  };
+
   if (!session || !session.user) {
     return res.status(500).json("Login to upload.");
   }
@@ -87,7 +94,6 @@ export default async function handler(
   });
 
   let jsonStartResponse = await startResponse.json();
-
   let endpointUrl = jsonStartResponse.urls.get;
   const originalImage = jsonStartResponse.input.image;
   const roomId = jsonStartResponse.id;
@@ -105,7 +111,7 @@ export default async function handler(
       },
     });
     let jsonFinalResponse = await finalResponse.json();
-
+    console.log("jsonFinalResponse: ", jsonFinalResponse);
     if (jsonFinalResponse.status === "succeeded") {
       generatedImage = jsonFinalResponse.output[1] as string;
     } else if (jsonFinalResponse.status === "failed") {

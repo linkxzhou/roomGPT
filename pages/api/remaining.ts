@@ -7,8 +7,15 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Check if user is logged in
-  const session = await getServerSession(req, res, authOptions);
+  // Check if user is logged in,TODO: auth
+  const session = {
+    user: {
+      name: "Test",
+      email: "Test@gmail.com",
+    },
+    expires: "2030-04-12T01:18:39.044Z"
+  };
+
   if (!session || !session.user) {
     console.log("User not logged in");
     return res.status(401).json("Login to upload.");

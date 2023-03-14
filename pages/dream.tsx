@@ -16,7 +16,7 @@ import downloadPhoto from "../utils/downloadPhoto";
 import DropDown from "../components/DropDown";
 import { roomType, rooms, themeType, themes } from "../utils/dropdownTypes";
 import { GenerateResponseData } from "./api/generate";
-import { useSession, signIn } from "next-auth/react";
+import { signIn } from "next-auth/react";
 import useSWR from "swr";
 import { Rings } from "react-loader-spinner";
 import getRemainingTime from "../utils/getRemainingTime";
@@ -38,10 +38,17 @@ const Home: NextPage = () => {
   const [photoName, setPhotoName] = useState<string | null>(null);
   const [theme, setTheme] = useState<themeType>("Modern");
   const [room, setRoom] = useState<roomType>("Living Room");
-
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, mutate } = useSWR("/api/remaining", fetcher);
-  const { data: session, status } = useSession();
+  // TODO: auth
+  const session = {
+    user: {
+      name: "Test",
+      email: "Test@gmail.com",
+    },
+    expires: "2030-04-12T01:18:39.044Z"
+  };
+  const status = "authenticated";
   const { hours, minutes } = getRemainingTime();
 
   const options = {
@@ -121,27 +128,14 @@ const Home: NextPage = () => {
       </Head>
       <Header photo={session?.user?.image || undefined} />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
-        <a
-          href="https://twitter.com/nutlope/status/1633529333565251595"
-          target="_blank"
-          rel="noreferrer"
-          className="border border-gray-700 rounded-2xl py-2 px-4 text-gray-400 text-sm my-6 duration-300 ease-in-out hover:text-gray-300 transition"
-        >
-          <span className="font-semibold">728,000 rooms</span> generated and
-          counting
-        </a>
         <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
-          Generate your <span className="text-blue-600">dream</span> room
+          生成 <span className="text-blue-600">梦幻</span> 房间
         </h1>
         {status === "authenticated" && data && !restoredImage && (
           <p className="text-gray-400">
-            You have{" "}
+            现在体验阶段，您每天可以{" "}
             <span className="font-semibold text-gray-300">
-              {data.remainingGenerations} generations
-            </span>{" "}
-            left today. Your generations will renew in{" "}
-            <span className="font-semibold text-gray-300">
-              {hours} hours and {minutes} minutes.
+              无限使用
             </span>
           </p>
         )}
@@ -155,9 +149,8 @@ const Home: NextPage = () => {
                 </div>
               )}
               <div
-                className={`${
-                  restoredLoaded ? "visible mt-6 -ml-8" : "invisible"
-                }`}
+                className={`${restoredLoaded ? "visible mt-6 -ml-8" : "invisible"
+                  }`}
               >
                 <Toggle
                   className={`${restoredLoaded ? "visible mb-6" : "invisible"}`}
@@ -171,97 +164,6 @@ const Home: NextPage = () => {
                   restored={restoredImage!}
                 />
               )}
-              {status === "loading" ? (
-                <div className="max-w-[670px] h-[250px] flex justify-center items-center">
-                  <Rings
-                    height="100"
-                    width="100"
-                    color="white"
-                    radius="6"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                    visible={true}
-                    ariaLabel="rings-loading"
-                  />
-                </div>
-              ) : status === "authenticated" && !originalPhoto ? (
-                <>
-                  <div className="space-y-4 w-full max-w-sm">
-                    <div className="flex mt-3 items-center space-x-3">
-                      <Image
-                        src="/number-1-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
-                      <p className="text-left font-medium">
-                        Choose your room theme.
-                      </p>
-                    </div>
-                    <DropDown
-                      theme={theme}
-                      // @ts-ignore
-                      setTheme={(newTheme) => setTheme(newTheme)}
-                      themes={themes}
-                    />
-                  </div>
-                  <div className="space-y-4 w-full max-w-sm">
-                    <div className="flex mt-10 items-center space-x-3">
-                      <Image
-                        src="/number-2-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
-                      <p className="text-left font-medium">
-                        Choose your room type.
-                      </p>
-                    </div>
-                    <DropDown
-                      theme={room}
-                      // @ts-ignore
-                      setTheme={(newRoom) => setRoom(newRoom)}
-                      themes={rooms}
-                    />
-                  </div>
-                  <div className="mt-4 w-full max-w-sm">
-                    <div className="flex mt-6 w-96 items-center space-x-3">
-                      <Image
-                        src="/number-3-white.svg"
-                        width={30}
-                        height={30}
-                        alt="1 icon"
-                      />
-                      <p className="text-left font-medium">
-                        Upload a picture of your room.
-                      </p>
-                    </div>
-                  </div>
-                  <UploadDropZone />
-                </>
-              ) : (
-                !originalPhoto && (
-                  <div className="h-[250px] flex flex-col items-center space-y-6 max-w-[670px] -mt-8">
-                    <div className="max-w-xl text-gray-300">
-                      Sign in below with Google to create a free account and
-                      redesign your room today. You will be able to do 3
-                      redesigns per day for free.
-                    </div>
-                    <button
-                      onClick={() => signIn("google")}
-                      className="bg-gray-200 text-black font-semibold py-3 px-6 rounded-2xl flex items-center space-x-2"
-                    >
-                      <Image
-                        src="/google.png"
-                        width={20}
-                        height={20}
-                        alt="google's logo"
-                      />
-                      <span>Sign in with Google</span>
-                    </button>
-                  </div>
-                )
-              )}
               {originalPhoto && !restoredImage && (
                 <Image
                   alt="original photo"
@@ -274,7 +176,7 @@ const Home: NextPage = () => {
               {restoredImage && originalPhoto && !sideBySide && (
                 <div className="flex sm:space-x-4 sm:flex-row flex-col">
                   <div>
-                    <h2 className="mb-1 font-medium text-lg">Original Room</h2>
+                    <h2 className="mb-1 font-medium text-lg">原始图片</h2>
                     <Image
                       alt="original photo"
                       src={originalPhoto}
@@ -284,7 +186,7 @@ const Home: NextPage = () => {
                     />
                   </div>
                   <div className="sm:mt-0 mt-8">
-                    <h2 className="mb-1 font-medium text-lg">Generated Room</h2>
+                    <h2 className="mb-1 font-medium text-lg">生成图片</h2>
                     <a href={restoredImage} target="_blank" rel="noreferrer">
                       <Image
                         alt="restored photo"
@@ -314,7 +216,7 @@ const Home: NextPage = () => {
                   role="alert"
                 >
                   <div className="bg-red-500 text-white font-bold rounded-t px-4 py-2">
-                    Please try again later.
+                    抱歉，请重试一次
                   </div>
                   <div className="border border-t-0 border-red-400 rounded-b bg-red-100 px-4 py-3 text-red-700">
                     {error}
@@ -332,7 +234,7 @@ const Home: NextPage = () => {
                     }}
                     className="bg-blue-500 rounded-full text-white font-medium px-4 py-2 mt-8 hover:bg-blue-500/80 transition"
                   >
-                    Generate New Room
+                    生成新的照片
                   </button>
                 )}
                 {restoredLoaded && (
@@ -345,10 +247,79 @@ const Home: NextPage = () => {
                     }}
                     className="bg-white rounded-full text-black border font-medium px-4 py-2 mt-8 hover:bg-gray-100 transition"
                   >
-                    Download Generated Room
+                    下载已生成的照片
                   </button>
                 )}
               </div>
+              {status === "loading" ? (
+                <div className="max-w-[670px] h-[250px] flex justify-center items-center">
+                  <Rings
+                    height="100"
+                    width="100"
+                    color="white"
+                    radius="6"
+                    wrapperStyle={{}}
+                    wrapperClass=""
+                    visible={true}
+                    ariaLabel="rings-loading"
+                  />
+                </div>
+              ) : status === "authenticated" && (
+                <>
+                  <div className="space-y-4 w-full max-w-sm">
+                    <div className="flex mt-3 items-center space-x-3">
+                      <Image
+                        src="/number-1-white.svg"
+                        width={30}
+                        height={30}
+                        alt="1 icon"
+                      />
+                      <p className="text-left font-medium">
+                        请选择您偏好的主题
+                      </p>
+                    </div>
+                    <DropDown
+                      theme={theme}
+                      // @ts-ignore
+                      setTheme={(newTheme) => setTheme(newTheme)}
+                      themes={themes}
+                    />
+                  </div>
+                  <div className="space-y-4 w-full max-w-sm">
+                    <div className="flex mt-10 items-center space-x-3">
+                      <Image
+                        src="/number-2-white.svg"
+                        width={30}
+                        height={30}
+                        alt="1 icon"
+                      />
+                      <p className="text-left font-medium">
+                        请选择您偏好的风格
+                      </p>
+                    </div>
+                    <DropDown
+                      theme={room}
+                      // @ts-ignore
+                      setTheme={(newRoom) => setRoom(newRoom)}
+                      themes={rooms}
+                    />
+                  </div>
+                  <div className="mt-4 w-full max-w-sm">
+                    <div className="flex mt-6 w-96 items-center space-x-3">
+                      <Image
+                        src="/number-3-white.svg"
+                        width={30}
+                        height={30}
+                        alt="1 icon"
+                      />
+                      <p className="text-left font-medium">
+                        请上传一张房间照片
+                      </p>
+                    </div>
+                  </div>
+                  <UploadDropZone />
+                </>
+              )}
             </motion.div>
           </AnimatePresence>
         </ResizablePanel>

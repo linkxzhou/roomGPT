@@ -40,16 +40,17 @@ const Home: NextPage = () => {
   const [room, setRoom] = useState<roomType>("Living Room");
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, mutate } = useSWR("/api/remaining", fetcher);
-  // TODO: auth
+  // TODO: fix auth
   const session = {
     user: {
       name: "Test",
       email: "Test@gmail.com",
+      image: "",
     },
     expires: "2030-04-12T01:18:39.044Z"
   };
-  const status = "authenticated";
   const { hours, minutes } = getRemainingTime();
+  let status = "authenticated";
 
   const options = {
     maxFileCount: 1,

@@ -32,11 +32,12 @@ export default async function handler(
   req: ExtendedNextApiRequest,
   res: NextApiResponse<GenerateResponseData | string>
 ) {
-  // Check if user is logged in, TODO: auth
+  // Check if user is logged in, TODO: fix auth
   const session = {
     user: {
       name: "Test",
       email: "Test@gmail.com",
+      image: "",
     },
     expires: "2030-04-12T01:18:39.044Z"
   };

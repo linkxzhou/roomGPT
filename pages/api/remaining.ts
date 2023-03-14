@@ -12,6 +12,7 @@ export default async function handler(
     user: {
       name: "Test",
       email: "Test@gmail.com",
+      image: "",
     },
     expires: "2030-04-12T01:18:39.044Z"
   };

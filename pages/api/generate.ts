@@ -103,7 +103,6 @@ export default async function handler(
   let generatedImage: string | null = null;
   while (!generatedImage) {
     // Loop in 1s intervals until the alt text is ready
-    console.log("polling for result...");
     let finalResponse = await fetch(endpointUrl, {
       method: "GET",
       headers: {
@@ -112,7 +111,7 @@ export default async function handler(
       },
     });
     let jsonFinalResponse = await finalResponse.json();
-    console.log("jsonFinalResponse: ", jsonFinalResponse);
+    console.log("polling for result... jsonFinalResponse: ", jsonFinalResponse);
     if (jsonFinalResponse.status === "succeeded") {
       generatedImage = jsonFinalResponse.output[1] as string;
     } else if (jsonFinalResponse.status === "failed") {

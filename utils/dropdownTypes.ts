@@ -19,7 +19,6 @@ export type colorType =
   | "Default"
   | "White"
   | "SkyBlue"
-  | "SkyBlue"
   | "Orange"
   | "LightPink"
   | "Pink"
@@ -51,7 +50,6 @@ export const rooms: roomType[] = [
 export const colors: colorType[] = [
   "Default", 
   "White", 
-  "SkyBlue", 
   "SkyBlue", 
   "Orange", 
   "LightPink", 

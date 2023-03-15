@@ -16,6 +16,7 @@ interface ExtendedNextApiRequest extends NextApiRequest {
     imageUrl: string;
     theme: string;
     room: string;
+    color: string;
   };
 }
 
@@ -70,6 +71,8 @@ export default async function handler(
   }
 
   const { imageUrl, theme, room } = req.body;
+  let color = req.body?.color?.toLowerCase() != "default" ? req.body.color.toLowerCase(): "";
+  console.log(`a ${color} ${theme.toLowerCase()} ${room.toLowerCase()}`);
   // POST request to Replicate to start the image restoration generation process
   let startResponse = await fetch("https://api.replicate.com/v1/predictions", {
     method: "POST",
@@ -85,7 +88,7 @@ export default async function handler(
         prompt:
           room === "Gaming Room"
             ? "a room for gaming with gaming computers, gaming consoles, and gaming chairs"
-            : `a ${theme.toLowerCase()} ${room.toLowerCase()}`,
+            : `a ${color} ${theme.toLowerCase()} ${room.toLowerCase()}`,
         a_prompt:
           "best quality, extremely detailed, photo from Pinterest, interior, cinematic photo, ultra-detailed, ultra-realistic, award-winning",
         n_prompt:

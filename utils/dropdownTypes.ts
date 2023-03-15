@@ -14,6 +14,22 @@ export type roomType =
   | "Kitchen"
   | "Gaming Room";
 
+
+export type colorType =
+  | "Default"
+  | "White"
+  | "SkyBlue"
+  | "SkyBlue"
+  | "Orange"
+  | "LightPink"
+  | "Pink"
+  | "LightGreen"
+  | "Green"
+  | "IndianRed"
+  | "LightGrey"
+  | "Coral"
+  | "Wheat";
+
 export const themes: themeType[] = [
   "Modern",
   "Minimalist",
@@ -21,6 +37,7 @@ export const themes: themeType[] = [
   "Tropical",
   "Vintage",
 ];
+
 export const rooms: roomType[] = [
   "Living Room",
   "Dining Room",
@@ -29,4 +46,20 @@ export const rooms: roomType[] = [
   "Bathroom",
   "Gaming Room",
   "Kitchen",
+];
+
+export const colors: colorType[] = [
+  "Default", 
+  "White", 
+  "SkyBlue", 
+  "SkyBlue", 
+  "Orange", 
+  "LightPink", 
+  "Pink", 
+  "LightGreen", 
+  "Green", 
+  "IndianRed", 
+  "LightGrey", 
+  "Coral",
+  "Wheat",
 ];

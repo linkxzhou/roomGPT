@@ -14,7 +14,7 @@ import Toggle from "../components/Toggle";
 import appendNewToName from "../utils/appendNewToName";
 import downloadPhoto from "../utils/downloadPhoto";
 import DropDown from "../components/DropDown";
-import { roomType, rooms, themeType, themes } from "../utils/dropdownTypes";
+import { roomType, rooms, themeType, themes, colorType, colors } from "../utils/dropdownTypes";
 import { GenerateResponseData } from "./api/generate";
 import { signIn } from "next-auth/react";
 import useSWR from "swr";
@@ -38,6 +38,7 @@ const Home: NextPage = () => {
   const [photoName, setPhotoName] = useState<string | null>(null);
   const [theme, setTheme] = useState<themeType>("Modern");
   const [room, setRoom] = useState<roomType>("Living Room");
+  const [color, setColor] = useState<colorType>("Default");
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, mutate } = useSWR("/api/remaining", fetcher);
   // TODO: fix auth
@@ -103,7 +104,7 @@ const Home: NextPage = () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ imageUrl: fileUrl, theme, room }),
+      body: JSON.stringify({ imageUrl: fileUrl, theme, room, color }),
     });
 
     let response = (await res.json()) as GenerateResponseData;
@@ -289,7 +290,7 @@ const Home: NextPage = () => {
                         alt="1 icon"
                       />
                       <p className="text-left font-medium">
-                        请选择您偏好的风格
+                        请选择您偏好的风格(或者颜色)
                       </p>
                     </div>
                     <DropDown
@@ -297,6 +298,12 @@ const Home: NextPage = () => {
                       // @ts-ignore
                       setTheme={(newRoom) => setRoom(newRoom)}
                       themes={rooms}
+                    />
+                    <DropDown
+                      theme={color}
+                      // @ts-ignore
+                      setTheme={(newColor) => setColor(newColor)}
+                      themes={colors}
                     />
                   </div>
                   <div className="mt-4 w-full max-w-sm">

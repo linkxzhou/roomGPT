@@ -36,9 +36,9 @@ const Home: NextPage = () => {
   const [sideBySide, setSideBySide] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [photoName, setPhotoName] = useState<string | null>(null);
-  const [theme, setTheme] = useState<themeType>("Modern");
-  const [room, setRoom] = useState<roomType>("Living Room");
-  const [color, setColor] = useState<colorType>("Default");
+  const [theme, setTheme] = useState<themeType>("现代|Modern");
+  const [room, setRoom] = useState<roomType>("客厅|Living Room");
+  const [color, setColor] = useState<colorType>("默认|");
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, mutate } = useSWR("/api/remaining", fetcher);
   // TODO: fix auth

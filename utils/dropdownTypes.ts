@@ -4,7 +4,7 @@ export type themeType =
   | "中式|Chinese"
   | "极简主义|Minimalist"
   | "专业|Professional"
-  | "北欧|European"
+  | "北欧|Nordic"
   | "波西米亚|Bohemia"
   | "热带风格|Tropical";
 
@@ -38,7 +38,7 @@ export const themes: themeType[] = [
   "中式|Chinese",
   "极简主义|Minimalist",
   "专业|Professional",
-  "北欧|European",
+  "北欧|Nordic",
   "波西米亚|Bohemia",
   "热带风格|Tropical",
 ];

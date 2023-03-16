@@ -74,7 +74,7 @@ export default async function handler(
   let themeEn = theme.split("|")[1]
   let roomEn = room.split("|")[1]
   let colorEn = color.split("|")[1]
-  console.log(`a ${colorEn} ${themeEn.toLowerCase()} ${roomEn.toLowerCase()}`);
+  console.log(`a ${colorEn} ${themeEn} ${roomEn.toLowerCase()}`);
   // POST request to Replicate to start the image restoration generation process
   let startResponse = await fetch("https://api.replicate.com/v1/predictions", {
     method: "POST",
@@ -90,7 +90,7 @@ export default async function handler(
         prompt:
           room === "Gaming Room"
             ? "a room for gaming with gaming computers, gaming consoles, and gaming chairs"
-            : `a ${colorEn} ${themeEn.toLowerCase()} ${roomEn.toLowerCase()}`,
+            : `a ${colorEn} ${themeEn} style ${roomEn.toLowerCase()}`,
         a_prompt:
           "best quality, extremely detailed, photo from Pinterest, interior, cinematic photo, ultra-detailed, ultra-realistic, award-winning",
         n_prompt:

@@ -16,10 +16,10 @@ import downloadPhoto from "../utils/downloadPhoto";
 import DropDown from "../components/DropDown";
 import { roomType, rooms, themeType, themes, colorType, colors } from "../utils/dropdownTypes";
 import { GenerateResponseData } from "./api/generate";
-import { signIn } from "next-auth/react";
 import useSWR from "swr";
 import { Rings } from "react-loader-spinner";
 import getRemainingTime from "../utils/getRemainingTime";
+import { checkSumEncrypt, getLocal, kLocalInviteCode } from "../utils/util";
 
 // Configuration for the uploader
 const uploader = Uploader({
@@ -41,17 +41,8 @@ const Home: NextPage = () => {
   const [color, setColor] = useState<colorType>("默认|");
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, mutate } = useSWR("/api/remaining", fetcher);
-  // TODO: fix auth
-  const session = {
-    user: {
-      name: "Test",
-      email: "Test@gmail.com",
-      image: "",
-    },
-    expires: "2030-04-12T01:18:39.044Z"
-  };
   const { hours, minutes } = getRemainingTime();
-  let status = "authenticated";
+  const status = "authenticated";
 
   const options = {
     maxFileCount: 1,
@@ -73,6 +64,11 @@ const Home: NextPage = () => {
       },
     },
     onValidate: async (file: File): Promise<undefined | string> => {
+      const inviteCode = getLocal(kLocalInviteCode);
+      const isOk = checkSumEncrypt(inviteCode);
+      if (!isOk) {
+        return "您的邀请码不合法，请到首页填写正确的邀请码";
+      }
       return data.remainingGenerations === 0
         ? `No more generations left. Try again in ${hours} hours and ${minutes} minutes.`
         : undefined;
@@ -128,19 +124,17 @@ const Home: NextPage = () => {
       <Head>
         <title>造梦空间</title>
       </Head>
-      <Header photo={session?.user?.image || undefined} />
+      <Header />
       <main className="flex flex-1 w-full flex-col items-center justify-center text-center px-4 mt-4 sm:mb-0 mb-8">
         <h1 className="mx-auto max-w-4xl font-display text-4xl font-bold tracking-normal text-slate-100 sm:text-6xl mb-5">
           生成 <span className="text-blue-600">梦幻</span> 房间
         </h1>
-        {status === "authenticated" && data && !restoredImage && (
-          <p className="text-gray-400">
-            现在体验阶段，您每天可以{" "}
-            <span className="font-semibold text-gray-300">
-              无限使用
-            </span>
-          </p>
-        )}
+        <p className="text-gray-400">
+          现在体验阶段，您每天可以{" "}
+          <span className="font-semibold text-gray-300">
+            无限使用
+          </span>
+        </p>
         <ResizablePanel>
           <AnimatePresence mode="wait">
             <motion.div className="flex justify-between items-center w-full flex-col mt-4">
@@ -290,7 +284,7 @@ const Home: NextPage = () => {
                         alt="1 icon"
                       />
                       <p className="text-left font-medium">
-                        请选择您偏好的风格(或者颜色)
+                        请选择您偏好的风格(颜色)
                       </p>
                     </div>
                     <DropDown

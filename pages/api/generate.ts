@@ -1,9 +1,6 @@
 import { Ratelimit } from "@upstash/ratelimit";
 import type { NextApiRequest, NextApiResponse } from "next";
-import requestIp from "request-ip";
 import redis from "../../utils/redis";
-import { getServerSession } from "next-auth/next";
-import { authOptions } from "./auth/[...nextauth]";
 
 export type GenerateResponseData = {
   original: string | null;
@@ -33,23 +30,9 @@ export default async function handler(
   req: ExtendedNextApiRequest,
   res: NextApiResponse<GenerateResponseData | string>
 ) {
-  // Check if user is logged in, TODO: fix auth
-  const session = {
-    user: {
-      name: "Test",
-      email: "Test@gmail.com",
-      image: "",
-    },
-    expires: "2030-04-12T01:18:39.044Z"
-  };
-
-  if (!session || !session.user) {
-    return res.status(500).json("Login to upload.");
-  }
-
   // Rate Limiter Code
   if (ratelimit) {
-    const identifier = session.user.email;
+    const identifier = "default"; // TODO: default name
     const result = await ratelimit.limit(identifier!);
     res.setHeader("X-RateLimit-Limit", result.limit);
     res.setHeader("X-RateLimit-Remaining", result.remaining);

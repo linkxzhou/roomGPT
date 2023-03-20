@@ -42,7 +42,8 @@ const Home: NextPage = () => {
   const fetcher = (url: string) => fetch(url).then((res) => res.json());
   const { data, mutate } = useSWR("/api/remaining", fetcher);
   const { hours, minutes } = getRemainingTime();
-  const status = "authenticated";
+
+  let status = "authenticated";
 
   const options = {
     maxFileCount: 1,

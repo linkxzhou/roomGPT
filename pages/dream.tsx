@@ -25,7 +25,7 @@ import { checkSumEncrypt, getLocal, kLocalInviteCode } from "../utils/util";
 const uploader = Uploader({
   apiKey: !!process.env.NEXT_PUBLIC_UPLOAD_API_KEY
     ? process.env.NEXT_PUBLIC_UPLOAD_API_KEY
-    : "public_W142hgo3ko65KP27XLKDGWjHv5zM",
+    : "free", // public_W142hgo3ko65KP27XLKDGWjHv5zM
 });
 
 const Home: NextPage = () => {

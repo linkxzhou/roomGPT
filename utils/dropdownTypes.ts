@@ -6,7 +6,9 @@ export type themeType =
   | "专业|Professional"
   | "北欧|Nordic"
   | "波西米亚|Bohemia"
-  | "热带风格|Tropical";
+  | "热带风格|Tropical"
+  | "工业风格|Industrial"
+  | "新古典主义|Neoclassic";
 
 export type roomType =
   | "客厅|Living Room"
@@ -16,7 +18,8 @@ export type roomType =
   | "办公室|Office"
   | "厨房|Kitchen"
   | "游戏室|Gaming Room"
-  | "书房|Study Room";
+  | "书房|Study Room"
+  | "地下室|Basement";
 
 
 export type colorType =
@@ -41,6 +44,8 @@ export const themes: themeType[] = [
   "北欧|Nordic",
   "波西米亚|Bohemia",
   "热带风格|Tropical",
+  "工业风格|Industrial",
+  "新古典主义|Neoclassic",
 ];
 
 export const rooms: roomType[] = [
@@ -52,6 +57,7 @@ export const rooms: roomType[] = [
   "厨房|Kitchen",
   "游戏室|Gaming Room",
   "书房|Study Room",
+  "地下室|Basement",
 ];
 
 export const colors: colorType[] = [
